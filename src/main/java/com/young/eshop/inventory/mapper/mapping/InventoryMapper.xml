@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.young.eshop.inventory.mapper.InventoryMapper">
+    <resultMap id="BaseResultMap" type="com.young.eshop.inventory.model.Inventory">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="inventory_count" jdbcType="INTEGER" property="inventoryCount"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        inventory.id as id, inventory.`name` as `name`, inventory.inventory_count as inventory_count
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from inventory
+        where inventory.id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete
+        from inventory
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.young.eshop.inventory.model.Inventory"
+            useGeneratedKeys="true">
+        insert into inventory (`name`, inventory_count)
+        values (#{name,jdbcType=VARCHAR}, #{inventoryCount,jdbcType=INTEGER})
+    </insert>
+    <insert id="insertSelective" keyColumn="id" keyProperty="id"
+            parameterType="com.young.eshop.inventory.model.Inventory" useGeneratedKeys="true">
+        insert into inventory
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null">
+                `name`,
+            </if>
+            <if test="inventoryCount != null">
+                inventory_count,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="inventoryCount != null">
+                #{inventoryCount,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.young.eshop.inventory.model.Inventory">
+        update inventory
+        <set>
+            <if test="name != null">
+                `name` = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="inventoryCount != null">
+                inventory_count = #{inventoryCount,jdbcType=INTEGER},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.young.eshop.inventory.model.Inventory">
+        update inventory
+        set `name`          = #{name,jdbcType=VARCHAR},
+            inventory_count = #{inventoryCount,jdbcType=INTEGER}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>

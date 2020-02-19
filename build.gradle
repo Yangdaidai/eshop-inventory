@@ -1,0 +1,82 @@
+buildscript {
+    ext {
+        springBootVersion = "1.5.10.RELEASE"
+    }
+
+    repositories {
+        mavenLocal()
+        maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
+        mavenCentral()
+    }
+    dependencies {
+        classpath(
+                "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}",
+        )
+    }
+}
+
+
+plugins {
+    id "java"
+    id "org.springframework.boot" version "1.5.10.RELEASE"
+}
+
+
+group 'org.eshop'
+version '1.0.0-SNAPSHOT'
+
+
+springBoot {
+    buildInfo()
+}
+
+sourceSets {
+    main {
+        resources {
+            srcDirs = ['src/main/java', 'src/main/resources']
+        }
+    }
+}
+
+
+jar {
+    from('src/main/java') {
+        include 'com/young/**/mapping/*.xml'
+    }
+}
+
+// java编译的时候缺省状态下会因为中文字符而失败
+compileJava.options.encoding = 'UTF-8'
+javadoc.options.encoding = 'UTF-8'
+compileJava {
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+    options.encoding = 'UTF-8'
+    dependsOn(processResources)
+}
+
+ext {
+    lombokVersion = "1.18.12"
+    springBootVersion = "1.5.10.RELEASE"
+    mybatisSpringVersion = "2.1.1"
+    druidSpringVersion = "1.1.6"
+}
+
+dependencies {
+    compileOnly "org.projectlombok:lombok:${lombokVersion}"
+    annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+
+    compile(
+            "org.springframework.boot:spring-boot-starter-web:${springBootVersion}",
+            "org.springframework.boot:spring-boot-starter-jdbc:${springBootVersion}",
+            "org.springframework.boot:spring-boot-starter-data-redis:${springBootVersion}",
+            "org.mybatis.spring.boot:mybatis-spring-boot-starter:${mybatisSpringVersion}",
+            "com.alibaba:druid-spring-boot-starter:${druidSpringVersion}",
+            'org.aspectj:aspectjweaver:1.9.5',
+            'org.apache.commons:commons-lang3:3.8',
+            'mysql:mysql-connector-java:5.1.8',
+            'com.alibaba:fastjson:1.2.62'
+    )
+
+
+}

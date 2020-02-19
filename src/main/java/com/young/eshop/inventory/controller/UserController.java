@@ -1,0 +1,41 @@
+package com.young.eshop.inventory.controller;
+
+import com.young.eshop.inventory.model.User;
+import com.young.eshop.inventory.result.Result;
+import com.young.eshop.inventory.service.UserService;
+import com.young.eshop.inventory.util.ResultUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+/**
+ * 用户Controller控制器
+ *
+ * @author Administrator
+ */
+@RestController
+@RequestMapping("/user")
+public class UserController {
+
+    @Autowired
+    private UserService userService;
+
+
+    @GetMapping("/getUser")
+    public User getUser() {
+        return userService.findUserInfo();
+    }
+
+    @GetMapping("/getUserInfo")
+    public Result<User> getUserInfo() {
+        int a = 1 / 0; //handle会统一处理异常
+        return ResultUtils.success(userService.findUserInfo());
+    }
+
+    @GetMapping("/getCachedUserInfo")
+    public User getCachedUserInfo() {
+        return userService.getCachedUserInfo();
+    }
+
+}
