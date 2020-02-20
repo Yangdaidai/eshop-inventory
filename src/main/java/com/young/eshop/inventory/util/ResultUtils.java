@@ -16,19 +16,19 @@ import com.young.eshop.inventory.result.Result;
 public class ResultUtils<T> {
     public static <T> Result<T> success(T object) {
 
-        Result result = new Result();
+        Result<T> result = new Result<>();
         result.setCode(200);
         result.setMsg("success");
         result.setData(object);
         return result;
     }
 
-    public static Result success() {
+    public static <T> Result<T> success() {
         return success(null);
     }
 
-    public static Result error(Integer code, String msg) {
-        Result result = new Result();
+    public static <T> Result<T> error(Integer code, String msg) {
+        Result<T> result = new Result<>();
         result.setCode(code);
         result.setMsg(msg);
         return result;

@@ -17,4 +17,6 @@ public interface Request {
 
     Integer getInventoryId();
 
+    boolean isForceFresh();
+
 }

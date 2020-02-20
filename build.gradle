@@ -68,6 +68,7 @@ dependencies {
 
     compile(
             "org.springframework.boot:spring-boot-starter-web:${springBootVersion}",
+            "org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}",
             "org.springframework.boot:spring-boot-starter-jdbc:${springBootVersion}",
             "org.springframework.boot:spring-boot-starter-data-redis:${springBootVersion}",
             "org.mybatis.spring.boot:mybatis-spring-boot-starter:${mybatisSpringVersion}",

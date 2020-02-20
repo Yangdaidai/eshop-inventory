@@ -28,7 +28,7 @@ public class SystemLogAspect {
 //            + "&& !execution(public *  com.young.eshop.inventory.controller.UserController.*(..)))"
             ;
 
-    private ConcurrentHashMap<String, Long> timeMap = new ConcurrentHashMap();
+    private ConcurrentHashMap<String, Long> timeMap = new ConcurrentHashMap<>(16);
 
     public SystemLogAspect() {
         log.info(">>>>>>>>>>>>>>>>>>>AOP日志初始化<<<<<<<<<<<<<<<<<<<<<");

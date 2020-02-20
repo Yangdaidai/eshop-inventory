@@ -43,7 +43,8 @@ public class InventoryServiceImpl implements InventoryService {
     @Override
     public void setInventoryCache(Inventory inventory) {
         String key = InventoryKeyUtils.getInventoryKey(String.valueOf(inventory.getId()));
-        redisDao.set(key, inventory);
+        Integer inventoryCount = inventory.getInventoryCount();
+        redisDao.set(key, inventoryCount);
     }
 
     /**

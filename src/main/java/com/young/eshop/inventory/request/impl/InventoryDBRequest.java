@@ -49,4 +49,9 @@ public class InventoryDBRequest implements Request {
         return inventory.getId();
     }
 
+    @Override
+    public boolean isForceFresh() {
+        return false;
+    }
+
 }

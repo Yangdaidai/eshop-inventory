@@ -33,5 +33,3 @@ logging:
     com.young: DEBUG
     org.springframework.boot.actuate.endpoint: WARN
     org.springframework.web.servlet.mvc.method.annotation: WARN
-
-

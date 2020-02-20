@@ -17,14 +17,20 @@ public class InventoryCacheRequest implements Request {
      */
     private Integer productId;
     /**
+     * 是否强制刷新
+     */
+    private boolean foreRefresh;
+    /**
      * 商品库存Service
      */
     private InventoryService inventoryService;
 
     public InventoryCacheRequest(Integer productId,
-                                 InventoryService inventoryService) {
+                                 InventoryService inventoryService
+            , boolean foreRefresh) {
         this.productId = productId;
         this.inventoryService = inventoryService;
+        this.foreRefresh = foreRefresh;
     }
 
     @Override
@@ -38,4 +44,11 @@ public class InventoryCacheRequest implements Request {
     public Integer getInventoryId() {
         return productId;
     }
+
+    @Override
+    public boolean isForceFresh() {
+        return foreRefresh;
+    }
+
 }
+
