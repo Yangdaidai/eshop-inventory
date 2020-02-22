@@ -12,7 +12,7 @@ package com.young.eshop.inventory.util;
  * @Version 1.0.0
  **/
 public class InventoryKeyUtils {
-    public static final String DEFAULT_INVENTORY_KEY_PREFIX = "inventory:key:";
+    public static final String DEFAULT_INVENTORY_KEY_PREFIX = "inventory:";
 
     /**
      * 获取库存数据的key

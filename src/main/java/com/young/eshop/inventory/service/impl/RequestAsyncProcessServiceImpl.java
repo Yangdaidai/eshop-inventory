@@ -3,6 +3,7 @@ package com.young.eshop.inventory.service.impl;
 import com.young.eshop.inventory.request.Request;
 import com.young.eshop.inventory.request.RequestQueue;
 import com.young.eshop.inventory.service.RequestAsyncProcessService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.concurrent.ArrayBlockingQueue;
@@ -18,12 +19,13 @@ import java.util.concurrent.ArrayBlockingQueue;
  * @Date 2020/2/19 17:08
  * @Version 1.0.0
  **/
+@Slf4j
 @Service
 public class RequestAsyncProcessServiceImpl implements RequestAsyncProcessService {
 
     /**
      * @return void
-     * @Description 更新库存的数据记录
+     * @Description 路由相关请求
      * 1. 将更新数据的记录路由到指定的队列中
      * 2. 后台不断的将从队列中取值去处理
      * @param: request
@@ -32,7 +34,7 @@ public class RequestAsyncProcessServiceImpl implements RequestAsyncProcessServic
      * @Version V1.0.0
      **/
     @Override
-    public void process(Request request) {
+    public void route(Request request) {
         try {
             // 做请求的路由，根据每个请求的商品id，路由到对应的内存队列中去
             ArrayBlockingQueue<Request> queue = getRoutingQueue(request.getInventoryId());

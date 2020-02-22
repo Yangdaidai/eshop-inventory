@@ -42,9 +42,11 @@ public class InventoryServiceImpl implements InventoryService {
      **/
     @Override
     public void setInventoryCache(Inventory inventory) {
-        String key = InventoryKeyUtils.getInventoryKey(String.valueOf(inventory.getId()));
+        String key = InventoryKeyUtils.getInventoryKey(String.valueOf(inventory.getId().intValue()));
         Integer inventoryCount = inventory.getInventoryCount();
-        redisDao.set(key, inventoryCount);
+        redisDao.set(key, String.valueOf(inventoryCount));
+        log.info("===========双写日志===========: 设置库存缓存的请求已完成，商品id:{} , 库存数量:{} ", inventory.getId(), inventory.getInventoryCount());
+
     }
 
     /**
@@ -57,18 +59,12 @@ public class InventoryServiceImpl implements InventoryService {
      */
     @Override
     public Inventory getInventoryCache(Integer productId) {
-        Integer inventoryCount = 0;
 
         String key = InventoryKeyUtils.getInventoryKey(productId);
         String result = (String) redisDao.get(key);
-
         if (StringUtils.isNotEmpty(result)) {
-            try {
-                inventoryCount = Integer.valueOf(result);
-                return new Inventory(productId, null, inventoryCount);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            Integer count = Integer.parseInt(result);
+            return new Inventory(productId, null, count);
         }
         return null;
     }
@@ -86,6 +82,8 @@ public class InventoryServiceImpl implements InventoryService {
     public void removeInventoryCache(Inventory inventory) {
         String key = InventoryKeyUtils.getInventoryKey(String.valueOf(inventory.getId()));
         redisDao.delete(key);
+        log.info("===========双写日志===========: 已删除redis中的缓存  key: {}", key);
+
     }
 
     /**
@@ -99,6 +97,7 @@ public class InventoryServiceImpl implements InventoryService {
     @Override
     public void updateInventory(Inventory inventory) {
         inventoryMapper.updateByPrimaryKey(inventory);
+        log.info("===========双写日志===========: 已更新数据库中的库存,商品库存id: {}, 商品库存数量:{}", inventory.getId(), inventory.getInventoryCount());
     }
 
     /**

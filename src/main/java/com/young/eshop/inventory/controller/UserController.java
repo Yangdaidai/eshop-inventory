@@ -5,9 +5,7 @@ import com.young.eshop.inventory.result.Result;
 import com.young.eshop.inventory.service.UserService;
 import com.young.eshop.inventory.util.ResultUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * 用户Controller控制器
@@ -36,6 +34,11 @@ public class UserController {
     @GetMapping("/getCachedUserInfo")
     public User getCachedUserInfo() {
         return userService.getCachedUserInfo();
+    }
+
+    @PostMapping("/setCachedUserInfo")
+    public void setCachedUserInfo(@RequestBody User user) {
+        userService.setCachedUserInfo(user);
     }
 
 }

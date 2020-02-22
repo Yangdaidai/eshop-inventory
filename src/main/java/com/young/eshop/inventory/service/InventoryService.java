@@ -6,7 +6,8 @@ import com.young.eshop.inventory.model.Inventory;
  * 商品库存管理接口
  */
 public interface InventoryService {
-    void setInventoryCache(Inventory productInventory);
+
+    void setInventoryCache(Inventory inventory);
 
     /**
      * @return com.young.eshop.inventory.model.Inventory

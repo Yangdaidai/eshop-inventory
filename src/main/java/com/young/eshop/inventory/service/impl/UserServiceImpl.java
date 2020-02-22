@@ -8,6 +8,7 @@ import com.young.eshop.inventory.service.UserService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.Objects;
 
 /**
  * 用户Service实现类
@@ -31,17 +32,21 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getCachedUserInfo() {
-        redisDao.set("cached_user_lisi", "{\"id\": 1,\"name\": \"lisi\", \"age\":30}");
-
-        String userJSON = (String) redisDao.get("cached_user_lisi");
-        JSONObject userJSONObject = JSONObject.parseObject(userJSON);
-
+//        redisDao.set("cached_user_lisi", "{\"id\": 1,\"name\": \"lisi\", \"age\":30}");
         User user = new User();
-        user.setId(userJSONObject.getInteger("id"));
-        user.setName(userJSONObject.getString("name"));
-        user.setAge(userJSONObject.getInteger("age"));
-
+        String userJSON = (String) redisDao.get("cached_user_lisi");
+        if (Objects.nonNull(userJSON)) {
+            JSONObject userJSONObject = JSONObject.parseObject(userJSON);
+            user.setId(userJSONObject.getInteger("id"));
+            user.setName(userJSONObject.getString("name"));
+            user.setAge(userJSONObject.getInteger("age"));
+        }
         return user;
+    }
+
+    @Override
+    public void setCachedUserInfo(User user) {
+        redisDao.set("cached_user_lisi", JSONObject.toJSON(user).toString());
     }
 
 }

@@ -13,6 +13,7 @@ package com.young.eshop.inventory.request;
  * @Version 1.0.0
  **/
 public interface Request {
+
     void process();
 
     Integer getInventoryId();

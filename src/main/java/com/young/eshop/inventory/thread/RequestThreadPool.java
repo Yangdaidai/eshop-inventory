@@ -44,7 +44,6 @@ public class RequestThreadPool {
      */
     private String timeUnit = "SECONDS";
 
-    private ExecutorService executorService;
 
     public RequestThreadPool() {
 
@@ -65,7 +64,7 @@ public class RequestThreadPool {
          * 第五个参数：BlockingQueue: 用于缓存任务的队列 这里使用 ArrayBlockingQueue 这个是有界队列
          */
 
-        executorService = new ThreadPoolExecutor(this.corePoolSize, maximumPoolSize, keepAliveTime, TimeUnit.valueOf(timeUnit), new ArrayBlockingQueue<Runnable>(this.corePoolSize));
+        ExecutorService executorService = new ThreadPoolExecutor(this.corePoolSize, maximumPoolSize, keepAliveTime, TimeUnit.valueOf(timeUnit), new ArrayBlockingQueue<Runnable>(this.corePoolSize));
         for (int i = 0; i < 10; i++) {
             /*
               缓存队列使用Request 接口来作为泛型，将可以将队列的类型添加定义，同时也可以通过多态的特性来实现子类的扩展

@@ -40,6 +40,7 @@ public class RequestThread implements Callable<Boolean> {
             while (true) {
                 // Blocking就是说明，如果队列满了，或者是空的，那么都会在执行操作的时候，阻塞住
                 Request request = queue.take();
+                log.info("===========双写日志===========: 工作线程 商品库存id: {}", request.getInventoryId());
                 boolean forceFresh = request.isForceFresh();
 
                 // 如果需要强制更新的话
@@ -50,13 +51,14 @@ public class RequestThread implements Callable<Boolean> {
 
                     /**
                      * 更新（写）请求去重优化
-                     */
+                     * */
 
                     //如果是更新数据库的请求,那么就将那个inventoryId对应的标识设置为true
                     //更新数据库--->flag=true
                     if (request instanceof InventoryDBRequest) {
                         flagMap.put(String.valueOf(request.getInventoryId()), Boolean.TRUE);
 
+                        //更新缓存--->flag=false
                     } else if (request instanceof InventoryCacheRequest) {
                         Boolean flag = flagMap.get(String.valueOf(request.getInventoryId()));
 
@@ -69,6 +71,7 @@ public class RequestThread implements Callable<Boolean> {
                         //那么在这种情况下，可能就是之前没有任何的写请求和读请求的flag的值，此时还是需要从数据库中重新加载一次数据到缓存中的
                         if (null == flag) {
                             flagMap.put(String.valueOf(request.getInventoryId()), Boolean.FALSE);
+                            System.out.println("flag = " + flag);
                         }
 
                         // 更新缓存的请求
@@ -92,7 +95,6 @@ public class RequestThread implements Callable<Boolean> {
                         }
                     }
                 }
-
                 // 执行这个request操作
                 request.process();
             }
