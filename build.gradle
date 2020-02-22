@@ -55,6 +55,10 @@ compileJava {
     dependsOn(processResources)
 }
 
+test {
+    useJUnitPlatform()
+}
+
 ext {
     lombokVersion = "1.18.12"
     springBootVersion = "1.5.10.RELEASE"
@@ -63,6 +67,7 @@ ext {
 }
 
 dependencies {
+
     compileOnly "org.projectlombok:lombok:${lombokVersion}"
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
 
@@ -79,5 +84,12 @@ dependencies {
             'com.alibaba:fastjson:1.2.62'
     )
 
+    testCompile(
+            'org.junit.platform:junit-platform-launcher:1.2.0',
+            'org.junit.jupiter:junit-jupiter-engine:5.2.0',
+            'org.junit.vintage:junit-vintage-engine:5.2.0'
+    )
+
+    testImplementation("org.springframework.boot:spring-boot-starter-test:${springBootVersion}")
 
 }

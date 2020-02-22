@@ -1,9 +1,13 @@
 package com.young.eshop.inventory.thread;
 
 
+import com.young.eshop.inventory.constant.SystemConstant;
 import com.young.eshop.inventory.request.Request;
 import com.young.eshop.inventory.request.RequestQueue;
+import com.young.eshop.inventory.util.PropertiesUtils;
 
+import java.util.Objects;
+import java.util.Properties;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -24,34 +28,10 @@ import java.util.concurrent.TimeUnit;
  * @Version 1.0.0
  **/
 public class RequestThreadPool {
-    /**
-     * 核心线程数
-     */
-    private Integer corePoolSize = 10;
-
-    /**
-     * 线程池最大线程数
-     */
-    private Integer maximumPoolSize = 20;
-
-    /**
-     * 线程最大存活时间
-     */
-    private Long keepAliveTime = 60L;
-
-    /**
-     * 时间单位
-     */
-    private String timeUnit = "SECONDS";
-
 
     public RequestThreadPool() {
-
-
         //内存队列
-
         RequestQueue requestQueue = RequestQueue.getInstance();
-
 
         //初始化线程池 这里我们不使用Executors.newFixedThreadPool()方式，该种方式不推荐使用，
         //主要是因为默认允许的队列的长度是Integer.MAX_VALUE,可能会造成OOM
@@ -62,7 +42,26 @@ public class RequestThreadPool {
         //第四个参数：unit：时间单位
         //第五个参数：BlockingQueue: 用于缓存任务的队列 这里使用 ArrayBlockingQueue 这个是有界队列
 
-        ExecutorService executorService = new ThreadPoolExecutor(this.corePoolSize, maximumPoolSize, keepAliveTime, TimeUnit.valueOf(timeUnit), new ArrayBlockingQueue<>(this.corePoolSize));
+        //加载队列配置信息
+        Properties properties = PropertiesUtils.getProperties(SystemConstant.QUEUE_PROPERTIES);
+        if (Objects.isNull(properties)) return;
+        String corePoolSizeStr = properties.getProperty(SystemConstant.REQUEST_QUEUE_CORE_POOL_SIZE);
+        String maximumPoolSizeStr = properties.getProperty(SystemConstant.REQUEST_QUEUE_MAXIMUM_POOL_SIZE);
+        String keepAliveTimeStr = properties.getProperty(SystemConstant.REQUEST_QUEUE_KEEP_ALIVE_TIME);
+
+        // 时间单位 = "SECONDS"
+        String timeUnit = properties.getProperty(SystemConstant.REQUEST_QUEUE_TIME_UNIT);
+
+        //核心线程数 = 10
+        int corePoolSize = Integer.parseInt(corePoolSizeStr);
+
+        //线程池最大线程数 = 20
+        int maximumPoolSize = Integer.parseInt(maximumPoolSizeStr);
+
+        //线程最大存活时间 = 60L
+        long keepAliveTime = Long.parseLong(keepAliveTimeStr);
+
+        ExecutorService executorService = new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, TimeUnit.valueOf(timeUnit), new ArrayBlockingQueue<>(corePoolSize));
         for (int i = 0; i < 10; i++) {
             /*
               缓存队列使用Request 接口来作为泛型，将可以将队列的类型添加定义，同时也可以通过多态的特性来实现子类的扩展
