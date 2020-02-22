@@ -33,12 +33,14 @@ public class RequestAsyncProcessServiceImpl implements RequestAsyncProcessServic
      * @CreatedTime 2020/2/19 18:15
      * @Version V1.0.0
      **/
+
     @Override
     public void route(Request request) {
         try {
             // 做请求的路由，根据每个请求的商品id，路由到对应的内存队列中去
-            ArrayBlockingQueue<Request> queue = getRoutingQueue(request.getInventoryId());
+            Integer inventoryId = request.getInventoryId();
             // 将请求放入对应的队列中，完成路由操作
+            ArrayBlockingQueue<Request> queue = getRoutingQueue(inventoryId);
             queue.put(request);
         } catch (InterruptedException e) {
             e.printStackTrace();

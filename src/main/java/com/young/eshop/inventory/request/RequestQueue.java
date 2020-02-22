@@ -37,20 +37,18 @@ public class RequestQueue {
      * 主要用来判断读请求去重的操作
      * Boolean true 表示更新数据的操作 false 表示读取缓存的操作
      */
-    private Map<String, Boolean> flagMap = new ConcurrentHashMap<>(1);
+    private Map<Integer, Boolean> flagMap = new ConcurrentHashMap<>(1);
 
     /**
      * 使用静态内部类来实现单例的模式（绝对的线程安全）
      */
     private static class Singleton {
-        /**
-         * 私有的静态变量，确保该变量不会被外部调用
-         */
+
+        //私有的静态变量，确保该变量不会被外部调用
         private static RequestQueue requestQueue;
 
-        /**
-         * 静态代码块在类初始化时执行一次
-         */
+        //静态代码块在类初始化时执行一次
+
         static {
             requestQueue = new RequestQueue();
         }
@@ -84,16 +82,9 @@ public class RequestQueue {
     }
 
     /**
-     * 初始化便捷方法
-     */
-    public static void init() {
-        getInstance();
-    }
-
-    /**
      * 向容器中添加队列
      *
-     * @param queue
+     * @param queue 队列
      */
     public void add(ArrayBlockingQueue<Request> queue) {
         this.queues.add(queue);
@@ -102,7 +93,7 @@ public class RequestQueue {
     /**
      * 获取内存队列的数量
      *
-     * @return
+     * @return int 队列的数量
      */
     public int queueSize() {
         return queues.size();
@@ -111,8 +102,8 @@ public class RequestQueue {
     /**
      * 获取内存队列
      *
-     * @param index
-     * @return
+     * @param index 队列索引
+     * @return ArrayBlockingQueue
      */
     public ArrayBlockingQueue<Request> getQueue(int index) {
         return queues.get(index);
@@ -121,9 +112,9 @@ public class RequestQueue {
     /**
      * 返回标志位
      *
-     * @return tagMap
+     * @return tagMap 返回标志位
      */
-    public Map<String, Boolean> getFlagMap() {
+    public Map<Integer, Boolean> getFlagMap() {
         return this.flagMap;
     }
 

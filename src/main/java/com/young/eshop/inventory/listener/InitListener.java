@@ -23,7 +23,7 @@ public class InitListener implements ServletContextListener {
     /**
      * 初始化工作线程池和内存队列
      *
-     * @param sce
+     * @param sce ServletContextEvent
      */
     @Override
     public void contextInitialized(ServletContextEvent sce) {
@@ -35,7 +35,7 @@ public class InitListener implements ServletContextListener {
     /**
      * 监听器销毁执行的逻辑
      *
-     * @param sce
+     * @param sce ServletContextEvent
      */
     @Override
     public void contextDestroyed(ServletContextEvent sce) {

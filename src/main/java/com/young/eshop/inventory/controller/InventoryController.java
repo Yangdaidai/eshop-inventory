@@ -9,9 +9,9 @@ import com.young.eshop.inventory.service.InventoryService;
 import com.young.eshop.inventory.service.RequestAsyncProcessService;
 import com.young.eshop.inventory.util.ResultUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import java.util.Objects;
 
 /**
@@ -30,10 +30,10 @@ import java.util.Objects;
 @RequestMapping(value = "/inventory")
 public class InventoryController {
 
-    @Autowired
+    @Resource
     InventoryService inventoryService;
 
-    @Autowired
+    @Resource
     RequestAsyncProcessService requestAsyncProcessService;
 
 
@@ -48,13 +48,11 @@ public class InventoryController {
      * @Version V1.0.0
      **/
     @PostMapping(value = "/updateInventory")
-    public Result updateInventory(@RequestBody Inventory inventory) {
+    public Result<Inventory> updateInventory(@RequestBody Inventory inventory) {
         Integer id = inventory.getId();
         Integer count = inventory.getInventoryCount();
         log.info("===========双写日志===========: 接收到更新商品库存的请求，商品id:{},商品库存数量: {}", id, count);
         Request inventoryDBRequest = new InventoryDBRequest(inventory, this.inventoryService);
-        boolean forceFresh = inventoryDBRequest.isForceFresh();
-        log.info("inventoryDBRequest.forceFresh = {}", forceFresh);
         requestAsyncProcessService.route(inventoryDBRequest);
         return ResultUtils.success();
 
@@ -70,27 +68,24 @@ public class InventoryController {
      * @Version V1.0.0
      **/
     @GetMapping(value = "/getInventory/{id}")
-    public Result getInventory(@PathVariable("id") Integer id) {
+    public Result<Inventory> getInventory(@PathVariable("id") Integer id) {
         log.info("===========双写日志===========: 接收到获取商品库存的请求，商品库存id: {}", id);
 
-        Inventory inventory = null;
+        Inventory inventory;
 
         try {
 
-            Request request = new InventoryCacheRequest(id, inventoryService, false);
+            Request request = new InventoryCacheRequest(id, inventoryService);
             requestAsyncProcessService.route(request);
 
             // 将请求扔给service异步去处理以后，就需要while(true)一会儿，在这里hang住
             // 去尝试等待前面有商品库存更新的操作，同时缓存刷新的操作，将最新的数据刷新到缓存中
             long startTime = System.currentTimeMillis();
-            long endTime = 0L;
+            long endTime;
             long waitTime = 0L;
             // 等待超过200ms没有从缓存中获取到结果
-            while (true) {
+            while (waitTime <= 200) {
                 // 一般公司里面，面向用户的读请求控制在200ms就可以了 1秒(s)=1000毫秒(ms)
-                if (waitTime > 200) {
-                    break;
-                }
                 // 尝试去redis中读取一次商品库存的缓存数据
                 inventory = inventoryService.getInventoryCache(id);
 
@@ -102,7 +97,6 @@ public class InventoryController {
                     Thread.sleep(20);
                     endTime = System.currentTimeMillis();
                     waitTime = endTime - startTime;
-                    log.info("waitTime : ", waitTime);
                 }
             }
 
@@ -118,8 +112,7 @@ public class InventoryController {
                 // 2、可能在200ms内，就是读请求在队列中一直积压着，没有等待到它执行（在实际生产环境中，基本是比较坑了）
                 // 所以就直接查一次库，然后给队列里塞进去一个刷新缓存的请求
                 // 3、数据库里本身就没有，缓存穿透，穿透redis，请求到达mysql库
-                request = new InventoryCacheRequest(id, inventoryService, true);
-                request.process();
+                inventoryService.setInventoryCache(inventory);
                 return ResultUtils.success(inventory);
             }
         } catch (InterruptedException e) {

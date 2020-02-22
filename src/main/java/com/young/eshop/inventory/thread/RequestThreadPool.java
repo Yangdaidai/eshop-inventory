@@ -47,24 +47,22 @@ public class RequestThreadPool {
 
     public RequestThreadPool() {
 
-        /**
-         * 内存队列
-         */
+
+        //内存队列
+
         RequestQueue requestQueue = RequestQueue.getInstance();
 
-        /**
-         *
-         * 初始化线程池 这里我们不使用Executors.newFixedThreadPool()方式，该种方式不推荐使用，
-         * 主要是因为默认允许的队列的长度是Integer.MAX_VALUE,可能会造成OOM
-         * 参数可以放到配置文件中
-         * 第一个参数：corePoolSize: 线程中核心线程数的最大值（能同时运行的最大的线程数）
-         * 第二个参数：maximumPoolSize: 线程池中线程数的最大值
-         * 第三个参数：keepAliveTime: 线程存活时间
-         * 第四个参数：unit：时间单位
-         * 第五个参数：BlockingQueue: 用于缓存任务的队列 这里使用 ArrayBlockingQueue 这个是有界队列
-         */
 
-        ExecutorService executorService = new ThreadPoolExecutor(this.corePoolSize, maximumPoolSize, keepAliveTime, TimeUnit.valueOf(timeUnit), new ArrayBlockingQueue<Runnable>(this.corePoolSize));
+        //初始化线程池 这里我们不使用Executors.newFixedThreadPool()方式，该种方式不推荐使用，
+        //主要是因为默认允许的队列的长度是Integer.MAX_VALUE,可能会造成OOM
+        //参数可以放到配置文件中
+        //第一个参数：corePoolSize: 线程中核心线程数的最大值（能同时运行的最大的线程数）
+        //第二个参数：maximumPoolSize: 线程池中线程数的最大值
+        //第三个参数：keepAliveTime: 线程存活时间
+        //第四个参数：unit：时间单位
+        //第五个参数：BlockingQueue: 用于缓存任务的队列 这里使用 ArrayBlockingQueue 这个是有界队列
+
+        ExecutorService executorService = new ThreadPoolExecutor(this.corePoolSize, maximumPoolSize, keepAliveTime, TimeUnit.valueOf(timeUnit), new ArrayBlockingQueue<>(this.corePoolSize));
         for (int i = 0; i < 10; i++) {
             /*
               缓存队列使用Request 接口来作为泛型，将可以将队列的类型添加定义，同时也可以通过多态的特性来实现子类的扩展
@@ -126,7 +124,7 @@ public class RequestThreadPool {
      * 初始化便捷方法
      */
     public static void init() {
-        getInstance();
+        RequestThreadPool.getInstance();
     }
 
 }

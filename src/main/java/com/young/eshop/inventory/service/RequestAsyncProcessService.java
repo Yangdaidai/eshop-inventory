@@ -14,7 +14,7 @@ public interface RequestAsyncProcessService {
      * 1. 将更新数据的记录路由到指定的队列中
      * 2. 后台不断的将从队列中取值去处理
      *
-     * @param request
+     * @param request 请求
      */
     void route(Request request);
 }
