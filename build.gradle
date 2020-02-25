@@ -68,7 +68,6 @@ ext {
 
 dependencyManagement {
     imports {
-        mavenBom("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")
         mavenBom("org.springframework.boot:spring-boot-starter-parent:${springBootVersion}")
     }
 }
