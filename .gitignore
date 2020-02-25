@@ -3,6 +3,4 @@
 /gradle/
 /out/
 /build/
-/gradlew
-/gradlew.bat
 /src/main/resources/rebel.xml
