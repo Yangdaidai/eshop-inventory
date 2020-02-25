@@ -15,7 +15,6 @@ buildscript {
     }
 }
 
-
 plugins {
     id "java"
     id "org.springframework.boot" version "1.5.10.RELEASE"
@@ -64,6 +63,13 @@ ext {
     springBootVersion = "1.5.10.RELEASE"
     mybatisSpringVersion = "2.1.1"
     druidSpringVersion = "1.1.6"
+}
+
+dependencyManagement {
+    imports {
+        mavenBom("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")
+        mavenBom("org.springframework.boot:spring-boot-starter-parent:${springBootVersion}")
+    }
 }
 
 dependencies {
