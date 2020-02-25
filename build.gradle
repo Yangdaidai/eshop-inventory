@@ -66,12 +66,6 @@ ext {
     druidSpringVersion = "1.1.6"
 }
 
-dependencyManagement {
-    imports {
-        mavenBom("org.springframework.boot:spring-boot-starter-parent:${springBootVersion}")
-    }
-}
-
 dependencies {
 
     compileOnly "org.projectlombok:lombok:${lombokVersion}"
