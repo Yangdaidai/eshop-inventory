@@ -35,6 +35,7 @@ public class RequestThreadPool {
 
         //初始化线程池 这里我们不使用Executors.newFixedThreadPool()方式，该种方式不推荐使用，
         //主要是因为默认允许的队列的长度是Integer.MAX_VALUE,可能会造成OOM
+
         //参数可以放到配置文件中
         //第一个参数：corePoolSize: 线程中核心线程数的最大值（能同时运行的最大的线程数）
         //第二个参数：maximumPoolSize: 线程池中线程数的最大值
