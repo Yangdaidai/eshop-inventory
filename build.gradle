@@ -39,8 +39,13 @@ jar {
     }
 }
 
+springBoot {
+    buildInfo()
+}
+
 // java编译的时候缺省状态下会因为中文字符而失败
-javadoc.options.encoding = 'UTF-8'
+[compileJava, compileTestJava, javadoc]*.options*.encoding = 'UTF-8'
+
 compileJava {
     sourceCompatibility = 1.8
     targetCompatibility = 1.8
@@ -62,8 +67,10 @@ dependencies {
 
     compileOnly "org.projectlombok:lombok:${lombokVersion}"
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-parent', version: "${springBootVersion}", ext: 'pom'
+
     compile(
-            "org.springframework.boot:spring-boot-starter-parent:${springBootVersion}",
             "org.springframework.boot:spring-boot-starter-web:${springBootVersion}",
             "org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}",
             "org.springframework.boot:spring-boot-starter-jdbc:${springBootVersion}",
@@ -77,10 +84,11 @@ dependencies {
     )
 
     testCompile(
-            "org.springframework.boot:spring-boot-starter-web:${springBootVersion}",
             'org.junit.platform:junit-platform-launcher:1.2.0',
             'org.junit.jupiter:junit-jupiter-engine:5.2.0',
             'org.junit.vintage:junit-vintage-engine:5.2.0'
     )
+
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
 
 }
