@@ -32,6 +32,12 @@ sourceSets {
     }
 }
 
+repositories {
+    mavenLocal()
+    maven { url "http://maven.aliyun.com/nexus/content/groups/public" }
+    mavenCentral()
+}
+
 
 jar {
     from('src/main/java') {
