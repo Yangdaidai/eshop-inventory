@@ -5,7 +5,7 @@ buildscript {
 
     repositories {
         mavenLocal()
-        maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
+        maven { url 'https://maven.aliyun.com/nexus/content/groups/public/' }
         mavenCentral()
     }
     dependencies {
@@ -34,7 +34,7 @@ sourceSets {
 
 repositories {
     mavenLocal()
-    maven { url "http://maven.aliyun.com/nexus/content/groups/public" }
+    maven { url "https://maven.aliyun.com/nexus/content/groups/public" }
     mavenCentral()
 }
 
@@ -43,10 +43,6 @@ jar {
     from('src/main/java') {
         include 'com/young/**/mapping/*.xml'
     }
-}
-
-springBoot {
-    buildInfo()
 }
 
 // java编译的时候缺省状态下会因为中文字符而失败
@@ -74,9 +70,7 @@ dependencies {
     compileOnly "org.projectlombok:lombok:${lombokVersion}"
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
 
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter-parent', version: "${springBootVersion}", ext: 'pom'
-
-    compile(
+    implementation(
             "org.springframework.boot:spring-boot-starter-web:${springBootVersion}",
             "org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}",
             "org.springframework.boot:spring-boot-starter-jdbc:${springBootVersion}",
@@ -89,12 +83,12 @@ dependencies {
             'com.alibaba:fastjson:1.2.62'
     )
 
-    testCompile(
+    testImplementation(
+            "org.springframework.boot:spring-boot-starter-test",
             'org.junit.platform:junit-platform-launcher:1.2.0',
             'org.junit.jupiter:junit-jupiter-engine:5.2.0',
             'org.junit.vintage:junit-vintage-engine:5.2.0'
-    )
 
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    )
 
 }

@@ -1,10 +1,1 @@
-pluginManagement {
-    resolutionStrategy {
-    }
-    repositories {
-        maven { url "http://maven.aliyun.com/nexus/content/groups/public" }
-        gradlePluginPortal()
-    }
-}
-
 rootProject.name = 'eshop-inventory'
