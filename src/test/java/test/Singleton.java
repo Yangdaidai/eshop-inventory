@@ -14,11 +14,15 @@ package test;
 public class Singleton {
 
     private static class SingletonHolder {
-        private static Singleton INSTANCE = new Singleton();
+        private static Singleton singleton;
+
+        static {
+            singleton = new Singleton();
+        }
     }
 
     public static Singleton getInstance() {
-        return SingletonHolder.INSTANCE;
+        return SingletonHolder.singleton;
     }
 
     public static void main(String[] args) {
