@@ -1,21 +1,26 @@
+server:
+  port: 8082
+
 spring:
   application:
     name: inventory
-  profiles:
-    active: dev
 
-    #配置redis
+  datasource:
+    url: jdbc:mysql://localhost:3306/eshop?useSSL=false&characterEncoding=utf-8&serverTimezone=UTC
+    username: root
+    password: 1234
+    driver-class-name: com.mysql.jdbc.Driver
+    druid:
+      validation-query: select 'x' from dual
 
-    #   192.168.0.110:7001 192.168.0.110:7002
-    #  192.168.0.111:7003 192.168.0.111:7004
-    #  192.168.0.112:7005 192.168.0.112:7006
-
-jedis:
-  pool:
-    max-active: 1000   # 连接池最大连接数（使用负值表示没有限制)
-    max-wait: -1ms      # 连接池最大阻塞等待时间（使用负值表示没有限制）
-    max-idle: 10      # 连接池中的最大空闲连接
-    min-idle: 5       # 连接池中的最小空闲连接
+#  redis:
+#    cluster:
+#      nodes:
+#        - 192.168.0.110:7001
+#        - 192.168.0.111:7003
+#        - 192.168.0.112:7005
+#        - 192.168.0.112:7006
+#
 
 #mybatis相关配置
 mybatis:
@@ -30,3 +35,4 @@ logging:
     com.young: DEBUG
     org.springframework.boot.actuate.endpoint: WARN
     org.springframework.web.servlet.mvc.method.annotation: WARN
+

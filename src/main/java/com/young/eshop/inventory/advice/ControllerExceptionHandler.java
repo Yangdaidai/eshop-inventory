@@ -6,9 +6,11 @@ import com.young.eshop.inventory.result.ResultEnum;
 import com.young.eshop.inventory.util.ResultUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import java.sql.SQLException;
 
 /**
  * Copyright © 2020 YOUNG. All rights reserved.
@@ -23,20 +25,21 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @Version 1.0.0
  **/
 @Slf4j
-@ControllerAdvice
+//@ControllerAdvice
+@RestControllerAdvice
 public class ControllerExceptionHandler {
 
     /**
-     * 处理所有不可知的异常
+     * 处理sql异常
      *
      * @param e
      * @return com.young.eshop.inventory.result.Result
      */
-    @ExceptionHandler(Exception.class)
+    @ExceptionHandler(SQLException.class)
     @ResponseBody
-    Result handleException(Exception e) {
-        log.error(e.getMessage(), e);
-        Result result = ResultUtils.error(ResultEnum.UNKNOWN_ERROR.getCode(), ResultEnum.UNKNOWN_ERROR.getMsg());
+    Result<Object> handleSQLException(SQLException e) {
+        log.error("sql getSimpleName : {},message : {}", e.getClass().getSimpleName(), e.getMessage());
+        Result<Object> result = ResultUtils.error(ResultEnum.SQL_FAIL.getCode(), ResultEnum.SQL_FAIL.getMsg());
         return result;
     }
 
@@ -49,6 +52,7 @@ public class ControllerExceptionHandler {
     @ExceptionHandler(value = BusinessException.class)
     @ResponseBody
     public Result handleBusinessException(BusinessException businessException) {
+        log.error("sql getSimpleName : {},message : {}", businessException.getClass().getSimpleName(), businessException.getMessage());
         return ResultUtils.error(businessException.getCode(), businessException.getMessage());
     }
 
@@ -63,6 +67,19 @@ public class ControllerExceptionHandler {
     Result handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         log.error(e.getMessage(), e);
         return ResultUtils.error(ResultEnum.VALID_ERROR.getCode(), e.getBindingResult().getAllErrors().get(0).getDefaultMessage());
-
+    }
+    
+    /**
+     * 处理所有不可知的异常
+     *
+     * @param e
+     * @return com.young.eshop.inventory.result.Result
+     */
+    @ExceptionHandler(Exception.class)
+    @ResponseBody
+    Result handleException(Exception e) {
+        log.error(e.getMessage(), e);
+        Result result = ResultUtils.error(ResultEnum.UNKNOWN_ERROR.getCode(), ResultEnum.UNKNOWN_ERROR.getMsg());
+        return result;
     }
 }

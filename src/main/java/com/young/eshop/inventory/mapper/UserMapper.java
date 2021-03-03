@@ -8,4 +8,5 @@ public interface UserMapper {
 
     User findUserInfo();
 
+    void insert(User user);
 }

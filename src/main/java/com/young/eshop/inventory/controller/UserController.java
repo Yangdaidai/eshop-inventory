@@ -2,6 +2,7 @@ package com.young.eshop.inventory.controller;
 
 import com.young.eshop.inventory.model.User;
 import com.young.eshop.inventory.result.Result;
+import com.young.eshop.inventory.result.ResultEnum;
 import com.young.eshop.inventory.service.UserService;
 import com.young.eshop.inventory.util.ResultUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,18 +28,25 @@ public class UserController {
 
     @GetMapping("/getUserInfo")
     public Result<User> getUserInfo() {
-        int a = 1 / 0; //handle会统一处理异常
-        return ResultUtils.success(userService.findUserInfo());
+//        int a = 1 / 0; //handle会统一处理异常
+//        return ResultUtils.success(userService.findUserInfo());
+        return ResultUtils.error(ResultEnum.NET_FAIL.ordinal(), ResultEnum.NET_FAIL.getMsg());
     }
 
-    @GetMapping("/getCachedUserInfo")
-    public User getCachedUserInfo() {
-        return userService.getCachedUserInfo();
+    @PostMapping("/insert")
+    public Result<Object> insert(@RequestBody User user) {
+        userService.insert(user);
+        return ResultUtils.success();
     }
 
-    @PostMapping("/setCachedUserInfo")
-    public void setCachedUserInfo(@RequestBody User user) {
-        userService.setCachedUserInfo(user);
-    }
+    //   @GetMapping("/getCachedUserInfo")
+    //   public User getCachedUserInfo() {
+    //       return userService.getCachedUserInfo();
+//    }
+
+    //  @PostMapping("/setCachedUserInfo")
+    //   public void setCachedUserInfo(@RequestBody User user) {
+    //      userService.setCachedUserInfo(user);
+    // }
 
 }

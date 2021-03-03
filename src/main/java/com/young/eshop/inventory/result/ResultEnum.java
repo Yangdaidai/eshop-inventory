@@ -7,6 +7,7 @@ public enum ResultEnum {
     UPDATE_FAIL(101, "更新异常"),
     SYSTEM_FAIL(102, "系统异常"),
     NET_FAIL(103, "网络异常"),
+    SQL_FAIL(104, "SQL异常"),
 
     ;
 

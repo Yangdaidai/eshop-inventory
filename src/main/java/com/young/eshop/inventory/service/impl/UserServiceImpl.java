@@ -49,4 +49,9 @@ public class UserServiceImpl implements UserService {
         redisDao.set("cached_user_lisi", JSONObject.toJSON(user).toString());
     }
 
+    @Override
+    public void insert(User user) {
+        userMapper.insert(user);
+    }
+
 }

@@ -9,6 +9,12 @@
         <result column="age" jdbcType="INTEGER" property="age"/>
     </resultMap>
 
+    <insert id="insert" useGeneratedKeys="false" keyProperty="id">
+		insert into eshop.user (id,name,age)
+		values
+		(#{id},#{name},#{age})
+     </insert>
+
     <select id="findUserInfo" resultMap="BaseResultMap">
 		SELECT u.id, u.name name , u.age age FROM eshop.user u limit 1
   	</select>

@@ -24,4 +24,6 @@ public interface UserService {
     User getCachedUserInfo();
 
     void setCachedUserInfo(User user);
+
+    void insert(User user);
 }
